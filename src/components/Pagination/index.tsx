@@ -24,6 +24,7 @@ export function Pagination({totalCountOfRegister, registerPerPage = 10, currentP
 
   const nextPages = currentPage < lastPage ? generatePagesArray(currentPage, Math.min(currentPage + siblingCount, lastPage)) : []
 
+
   return (
     <Stack
       direction={["column", "row"]}
@@ -39,7 +40,7 @@ export function Pagination({totalCountOfRegister, registerPerPage = 10, currentP
 
         { currentPage > (1 + siblingCount ) && (
           <>
-            <PaginationItem number={1} />
+            <PaginationItem onPageChange={onPageChange} number={1} />
 
             { currentPage > (2 + siblingCount ) && <Text color="gray.300" width="8" textAlign="center">...</Text>}
 
@@ -47,21 +48,21 @@ export function Pagination({totalCountOfRegister, registerPerPage = 10, currentP
         )}
 
          {previousPages.length > 0 && previousPages.map(page => {
-           return <PaginationItem key={page} number={page} />
+           return <PaginationItem onPageChange={onPageChange} key={page} number={page} />
          })}
 
 
-        <PaginationItem number={currentPage} isCurrent/>
+        <PaginationItem onPageChange={onPageChange} number={currentPage} isCurrent/>
        
         {nextPages.length > 0 && nextPages.map(page => {
-           return <PaginationItem key={page} number={page} />
+           return <PaginationItem  onPageChange={onPageChange} key={page} number={page} />
          })}
 
         { (currentPage  + siblingCount) < lastPage  && (
 
           <>
           { (currentPage + 1 + siblingCount) < lastPage && <Text color="gray.300" width="8" textAlign="center">...</Text>}
-            <PaginationItem number={lastPage} />
+            <PaginationItem onPageChange={onPageChange} number={lastPage} />
 
           </>
         )}
