@@ -5,9 +5,10 @@ import { RiAddLine, RiPencilLine } from "react-icons/ri";
 import { Header } from '../../components/Header';
 import { Pagination } from "../../components/Pagination";
 import { Sidebar } from '../../components/Sidebar'
-import { useUsers } from '../../services/hooks/useUsers';
+import { getUsers, useUsers } from '../../services/hooks/useUsers';
 import { queryClient } from '../../services/queryClient';
 import { api } from '../../services/api';
+import { GetServerSideProps } from 'next';
 
 export default function UserList() {
 
@@ -21,7 +22,7 @@ export default function UserList() {
   })
 
 
-  async function handlePrefetchUser(userId: number) {
+  async function handlePrefetchUser(userId: string) {
     await queryClient.prefetchQuery(['user', userId], async () => {
       const response = await api.get(`users/${userId}`)
 
@@ -100,7 +101,7 @@ export default function UserList() {
                         </Td>
                         <Td>
                           <Box>
-                            <Link color="purple.400" onMouseEnter={() => handlePrefetchUser(Number(user.id))}>
+                            <Link color="purple.400" onMouseEnter={() => handlePrefetchUser(user.id)}>
                               <Text fontWeight="bold">{user.name}</Text>
                             </Link>
                             <Text color="gray.300" fontSize="sm">{user.email}</Text>
@@ -134,4 +135,16 @@ export default function UserList() {
       </Flex>
     </Box>
   );
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+
+  const { users, totalCount } = await getUsers(1);
+
+  return {
+    props: {
+      users,
+      totalCount
+    }
+  }
 }
